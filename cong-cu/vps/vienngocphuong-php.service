@@ -1,0 +1,18 @@
+# PHP-FPM riêng cho website Viên Ngọc Phương (vienngocphuong.com)
+# Chép vào /etc/systemd/system/ bởi cong-cu/vps/cai-dat-may-chu.sh
+[Unit]
+Description=PHP 8.3 FPM rieng cho website Vien Ngoc Phuong
+After=network.target
+
+[Service]
+Type=notify
+RuntimeDirectory=php-vienngocphuong
+RuntimeDirectoryMode=0755
+ExecStartPre=/usr/sbin/php-fpm8.3 -t -y /etc/vienngocphuong/php-fpm.conf
+ExecStart=/usr/sbin/php-fpm8.3 --nodaemonize --fpm-config /etc/vienngocphuong/php-fpm.conf
+ExecReload=/bin/kill -USR2 $MAINPID
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+# Chỉ phục vụ ảnh/video – không chạy mã
+Options -ExecCGI
+<FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh|html?|svg)$">
+  Require all denied
+</FilesMatch>

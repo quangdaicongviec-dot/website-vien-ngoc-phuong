@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700">
+  <title>Ảnh mẫu giấy kiểm định – thay bằng ảnh chụp giấy thật</title>
+  <rect width="1000" height="700" fill="#efe9da"/>
+  <rect x="30" y="30" width="940" height="640" rx="8" fill="#fffdf7" stroke="#c9a13b" stroke-width="3"/>
+  <rect x="46" y="46" width="908" height="608" rx="4" fill="none" stroke="#c9a13b" stroke-width="1" stroke-dasharray="6 6"/>
+  <text x="500" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#0b5a32" letter-spacing="3">GIẤY KIỂM ĐỊNH</text>
+  <text x="500" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#876712">ẢNH MẪU – thay bằng ảnh chụp / scan giấy kiểm định thật</text>
+  <g fill="#d9d2bf">
+    <rect x="90" y="220" width="420" height="16" rx="8"/><rect x="90" y="262" width="360" height="16" rx="8"/>
+    <rect x="90" y="304" width="400" height="16" rx="8"/><rect x="90" y="346" width="300" height="16" rx="8"/>
+    <rect x="90" y="388" width="380" height="16" rx="8"/><rect x="90" y="430" width="330" height="16" rx="8"/>
+  </g>
+  <rect x="600" y="210" width="300" height="250" rx="6" fill="#f3efe4" stroke="#d9d2bf"/>
+  <ellipse cx="750" cy="335" rx="95" ry="70" fill="none" stroke="#2f9b5f" stroke-width="26" opacity="0.85"/>
+  <circle cx="820" cy="560" r="62" fill="none" stroke="#b42318" stroke-width="4" opacity="0.7"/>
+  <text x="820" y="572" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#b42318" opacity="0.75">MẪU</text>
+  <rect x="90" y="540" width="260" height="14" rx="7" fill="#d9d2bf"/><rect x="90" y="575" width="200" height="14" rx="7" fill="#d9d2bf"/>
+</svg>

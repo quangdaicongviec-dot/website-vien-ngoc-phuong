@@ -1,0 +1,68 @@
+# ============================================================
+#  Viên Ngọc Phương – cấu hình máy chủ (Apache / LiteSpeed)
+# ============================================================
+Options -Indexes
+DirectoryIndex index.php index.html
+AddDefaultCharset UTF-8
+
+ErrorDocument 404 /404.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Nếu đặt website trong thư mục con (ví dụ tenmien.vn/shop/), bỏ dấu # dòng dưới và sửa /shop/
+  # RewriteBase /shop/
+
+  # Bật dòng dưới (bỏ dấu #) sau khi đã cài SSL để luôn chạy https://
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Chặn truy cập trực tiếp dữ liệu, mã nguồn và tài liệu
+  RewriteRule ^(data|includes|anh-goc|tai-lieu|cong-cu)(/|$) - [F,L]
+  RewriteRule ^config\.php$ - [F,L]
+
+  # Đường dẫn đẹp
+  RewriteRule ^san-pham/([a-z0-9-]+)/?$ chi-tiet.php?sp=$1 [L,QSA]
+  RewriteRule ^danh-muc/([a-z0-9-]+)/?$ san-pham.php?danh-muc=$1 [L,QSA]
+  RewriteRule ^cam-nang/([a-z0-9-]+)/?$ bai-viet.php?bv=$1 [L,QSA]
+  RewriteRule ^qua-tang/([a-z0-9-]+)/?$ qua-tang.php?bst=$1 [L,QSA]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^google-shopping\.xml$ google-shopping.php [L]
+
+  # /lien-he  ->  lien-he.php
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.php -f
+  RewriteRule ^([a-z0-9-]+)$ $1.php [L,QSA]
+</IfModule>
+
+<FilesMatch "\.(md|csv|log|ini|sh|bak)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript text/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>

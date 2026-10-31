@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Tính năng website Viên Ngọc Phương – bản 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=block">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --emerald: #0b5a32; --deep: #062e1c; --gold: #c9a13b; --gold-light: #e6c873; --gold-text: #876712;
+    --cream: #faf6ec; --cream-2: #f3ecdb; --text: #353333; --muted: #666; --line: #e6e1d3; --sage: #587d6f;
+    --ok: #067647; --ok-bg: #e7f6ee; --warn: #8a5a00; --warn-bg: #fff4d6;
+  }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  @media print { body { background: #fff; } }
+  body { font-family: "Montserrat", Arial, sans-serif; font-size: 9.6pt; line-height: 1.55; color: var(--text); background: #888; }
+  .page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: #fff; padding: 15mm 16mm 18mm; page-break-after: always; break-after: page; margin: 0 auto; }
+  .page:last-child { page-break-after: auto; break-after: auto; }
+  h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; color: var(--deep); margin: 0; line-height: 1.2; font-weight: 600; }
+  p { margin: 0 0 2.2mm; }
+  ul { margin: 0 0 2mm; padding-left: 4.5mm; }
+  li { margin-bottom: 1mm; }
+  li::marker { color: var(--gold); }
+  strong { color: var(--deep); font-weight: 600; }
+
+  /* ---------- Chân trang ---------- */
+  .foot { position: absolute; left: 16mm; right: 16mm; bottom: 8mm; display: flex; justify-content: space-between; align-items: center; font-size: 7.5pt; color: #8a8a8a; border-top: 0.3mm solid var(--line); padding-top: 2.5mm; }
+  .foot img { height: 6mm; margin-right: 2mm; vertical-align: middle; }
+  .foot b { color: var(--gold-text); font-weight: 600; }
+
+  /* ---------- Bìa ---------- */
+  .cover { padding: 0; background: radial-gradient(130mm 110mm at 78% 30%, rgba(29,120,72,.55), transparent 70%), linear-gradient(150deg, #0a4a2b 0%, #062e1c 55%, #04210f 100%); color: #fff; }
+  .cover::before { content: ""; position: absolute; right: -60mm; top: 30mm; width: 190mm; height: 190mm; border-radius: 50%; border: .3mm solid rgba(230,200,115,.25); box-shadow: 0 0 0 14mm rgba(230,200,115,.04), 0 0 0 28mm rgba(230,200,115,.03); }
+  .cover__logo { position: absolute; left: 18mm; top: 18mm; background: var(--cream); border-radius: 4mm; padding: 4mm 6mm; }
+  .cover__logo img { height: 30mm; display: block; }
+  .cover__text { position: absolute; left: 18mm; right: 18mm; top: 78mm; }
+  .cover__eyebrow { font-size: 8.5pt; letter-spacing: .32em; text-transform: uppercase; color: var(--gold-light); font-weight: 600; margin-bottom: 5mm; }
+  .cover h1 { color: #fff; font-size: 34pt; line-height: 1.12; margin-bottom: 6mm; }
+  .cover h1 em { font-style: italic; color: var(--gold-light); font-weight: 500; }
+  .cover__sub { font-size: 11pt; color: rgba(255,255,255,.85); max-width: 130mm; line-height: 1.6; }
+  .cover__art { position: absolute; left: 50%; bottom: 19mm; width: 146mm; transform: translateX(-50%); filter: drop-shadow(0 6mm 8mm rgba(0,0,0,.35)); }
+  .cover__meta { position: absolute; left: 18mm; right: 18mm; bottom: 12mm; display: flex; justify-content: space-between; font-size: 8pt; color: rgba(255,255,255,.7); border-top: .3mm solid rgba(230,200,115,.3); padding-top: 3mm; }
+
+  /* ---------- Tiêu đề phần ---------- */
+  .part { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 6mm; padding-bottom: 3mm; border-bottom: .5mm solid var(--gold); }
+  .part__num { font-family: "Playfair Display", serif; font-size: 30pt; line-height: .9; color: var(--gold); font-weight: 600; margin-right: 4mm; }
+  .part__title { display: flex; align-items: flex-end; }
+  .part h2 { font-size: 19pt; }
+  .part__kicker { display: block; font-family: "Montserrat", sans-serif; font-size: 7.5pt; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-text); font-weight: 600; margin-bottom: 1mm; }
+  .group { font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--emerald); margin: 0 0 3mm; display: flex; align-items: center; gap: 2.5mm; }
+  .group::after { content: ""; flex: 1; height: .3mm; background: var(--line); }
+
+  /* ---------- Nhãn ---------- */
+  .tag { display: inline-flex; align-items: center; gap: 1mm; padding: .5mm 2.4mm; border-radius: 10mm; font-size: 7pt; font-weight: 700; letter-spacing: .02em; white-space: nowrap; vertical-align: middle; }
+  .tag--special { background: var(--deep); color: var(--gold-light); }
+  .tag--basic { background: var(--cream-2); color: var(--gold-text); }
+  .tag--ready { background: var(--ok-bg); color: var(--ok); }
+  .tag--setup { background: var(--warn-bg); color: var(--warn); }
+
+  /* ---------- Thẻ tính năng ---------- */
+  .feat { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; margin-bottom: 6.5mm; }
+  .feat--wide { grid-template-columns: 1fr; }
+  .feat--rev .feat__shot { order: -1; }
+  .feat__head { display: flex; align-items: flex-start; gap: 3mm; margin-bottom: 2.5mm; }
+  .feat__no { flex: none; width: 8mm; height: 8mm; border-radius: 50%; background: var(--deep); color: var(--gold-light); font-family: "Playfair Display", serif; font-weight: 600; font-size: 11pt; display: flex; align-items: center; justify-content: center; }
+  .feat h3 { font-size: 13pt; margin-bottom: 1.2mm; }
+  .feat__tags { display: flex; gap: 1.5mm; flex-wrap: wrap; }
+  .feat__why { font-style: italic; color: var(--sage); font-size: 8.8pt; border-left: .6mm solid var(--gold); padding-left: 2.5mm; margin: 2mm 0 2.5mm; }
+  .shot { display: block; width: 100%; border-radius: 2mm; box-shadow: 0 0 0 .25mm #d9d2bd, 0 2mm 5mm rgba(0,0,0,.08); }
+  .shot--crop { object-fit: cover; object-position: top; }
+  .cap { font-size: 7.2pt; color: #8a8a8a; margin-top: 1.5mm; text-align: center; }
+
+  /* ---------- Tổng quan ---------- */
+  .lead { font-size: 10.5pt; line-height: 1.65; color: #444; margin-bottom: 6mm; }
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; margin-bottom: 7mm; }
+  .pillar { background: var(--cream); border: .3mm solid #efe6cf; border-radius: 3mm; padding: 4.5mm 5mm; }
+  .pillar h3 { font-size: 11.5pt; margin-bottom: 1.5mm; }
+  .pillar p { margin: 0; font-size: 8.8pt; color: #555; }
+  .pillar__icon { font-size: 15pt; color: var(--gold); line-height: 1; margin-bottom: 2mm; font-family: "Playfair Display", serif; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 6mm; padding: 4mm 5mm; border: .3mm dashed #d9d2bd; border-radius: 3mm; margin-bottom: 7mm; font-size: 8.6pt; }
+  .legend div { display: flex; gap: 2.5mm; align-items: center; }
+  .toc { list-style: none; padding: 0; margin: 0; columns: 1; }
+  .toc li { display: flex; align-items: baseline; gap: 3mm; padding: 2.4mm 0; border-bottom: .3mm solid var(--line); margin: 0; font-size: 10pt; }
+  .toc .n { font-family: "Playfair Display", serif; color: var(--gold); font-weight: 600; font-size: 13pt; width: 7mm; }
+  .toc .t { flex: 1; color: var(--deep); font-weight: 600; }
+  .toc .d { color: #888; font-size: 8.5pt; flex: 2; }
+  .toc .p { color: var(--gold-text); font-weight: 600; }
+
+  /* ---------- Bảng / danh sách ---------- */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 7mm; }
+  .box { border: .3mm solid var(--line); border-radius: 3mm; padding: 4mm 4.5mm; break-inside: avoid; }
+  .box h3 { font-size: 11pt; margin-bottom: 2mm; display: flex; align-items: center; gap: 2mm; flex-wrap: wrap; }
+  .box ul { margin: 0; }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  th, td { text-align: left; padding: 2.2mm 2.5mm; border-bottom: .3mm solid var(--line); vertical-align: top; }
+  th { background: var(--deep); color: var(--gold-light); font-weight: 600; font-size: 8pt; letter-spacing: .03em; }
+  tr:nth-child(even) td { background: #fbf9f3; }
+  .flow { display: flex; align-items: stretch; gap: 2mm; margin: 2.5mm 0 3mm; }
+  .flow div { flex: 1; background: var(--cream); border-radius: 2mm; padding: 2.5mm; font-size: 7.8pt; line-height: 1.45; position: relative; }
+  .flow div b { display: block; font-size: 7pt; letter-spacing: .1em; color: var(--gold-text); margin-bottom: .8mm; }
+  .note { background: var(--warn-bg); border-radius: 2mm; padding: 2.5mm 3.5mm; font-size: 8.3pt; color: #5c4300; margin-top: 2mm; }
+  .chips { display: flex; flex-wrap: wrap; gap: 1.5mm; margin: 1.5mm 0 2.5mm; }
+  .chip { background: var(--cream-2); color: var(--deep); border-radius: 10mm; padding: .6mm 2.6mm; font-size: 7.6pt; font-weight: 600; }
+  .qr { width: 33mm; float: right; margin: 0 0 2mm 4mm; border-radius: 2mm; box-shadow: 0 0 0 .25mm #d9d2bd; }
+  .closing { margin-top: 6mm; background: var(--deep); color: rgba(255,255,255,.85); border-radius: 3mm; padding: 6mm 7mm; display: flex; gap: 6mm; align-items: center; }
+  .closing img { height: 20mm; background: var(--cream); border-radius: 2.5mm; padding: 2mm 3mm; }
+  .closing h3 { color: #fff; font-size: 13pt; margin-bottom: 1.5mm; }
+  .closing p { margin: 0; font-size: 8.8pt; }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin: 3mm 0 5mm; }
+  .duo .shot { height: 52mm; object-fit: cover; object-position: top; }
+  .new { display: inline-block; margin-left: 1.5mm; padding: .3mm 2mm; border-radius: 10mm; background: #fff4d6; color: #8a5a00; font-family: "Montserrat", sans-serif; font-size: 6.8pt; font-weight: 700; letter-spacing: .04em; vertical-align: middle; }
+  .rules td { padding: 1.6mm 2.5mm; }
+  .rules td:first-child { font-weight: 600; color: var(--deep); width: 30%; }
+</style>
+</head>
+<body>
+<style>
+  /* ---------- Bổ sung cho bản 3 ---------- */
+  .hl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.6mm 5mm; }
+  .hl { display: grid; grid-template-columns: 10mm 1fr; gap: 0 3.4mm; padding: 4.8mm 4.6mm 4.6mm; border-radius: 3mm; background: var(--cream); border: .3mm solid #efe6cf; break-inside: avoid; }
+  .hl__no { width: 10mm; height: 10mm; border-radius: 50%; background: var(--deep); color: var(--gold-light); font-family: "Playfair Display", serif; font-weight: 600; font-size: 12pt; display: flex; align-items: center; justify-content: center; }
+  .hl h3 { font-size: 12.2pt; margin: .8mm 0 1.6mm; }
+  .hl p { margin: 0; font-size: 9.2pt; line-height: 1.55; color: #4a4a4a; }
+  .hl--new { background: #fffaf0; border-color: #f0dca0; }
+  .try { display: flex; align-items: center; gap: 5mm; margin-top: 6mm; padding: 4mm 5mm; border-radius: 3mm; background: var(--deep); color: rgba(255,255,255,.88); }
+  .try img { width: 26mm; height: 26mm; border-radius: 2mm; background: #fff; flex: none; }
+  .try h3 { color: #fff; font-size: 12pt; margin-bottom: 1mm; }
+  .try p { margin: 0; font-size: 8.6pt; }
+  .try b { color: var(--gold-light); font-weight: 600; }
+  .cover__try { position: absolute; right: 18mm; top: 22mm; display: flex; align-items: center; gap: 3mm; background: rgba(255,255,255,.08); border: .3mm solid rgba(230,200,115,.35); border-radius: 3mm; padding: 2.5mm 3mm; font-size: 7.6pt; color: rgba(255,255,255,.85); line-height: 1.4; }
+  .cover__try img { width: 20mm; height: 20mm; border-radius: 1.5mm; background: #fff; }
+  .cover__try b { display: block; color: var(--gold-light); font-size: 8.4pt; }
+  .steps3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5mm; margin: 2.5mm 0 3.5mm; counter-reset: s; }
+  .steps3 div { background: var(--cream); border-radius: 2.5mm; padding: 3mm 3.2mm; font-size: 8.2pt; line-height: 1.45; }
+  .steps3 div b { display: block; font-size: 7.2pt; letter-spacing: .1em; color: var(--gold-text); margin-bottom: 1mm; }
+  .mini { font-size: 8.2pt; color: #666; margin: 0; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; }
+  .split--wide-r { grid-template-columns: 1fr 1.12fr; }
+  .split--wide-l { grid-template-columns: 1.15fr 1fr; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .pill-list { list-style: none; padding: 0; margin: 0 0 2mm; }
+  .pill-list li { position: relative; padding-left: 5.5mm; margin-bottom: 1.6mm; }
+  .pill-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--emerald); font-weight: 700; }
+  .phones .shot { box-shadow: none; border-radius: 0; }
+  .ni-table td, .ni-table th { text-align: center; padding: 1.8mm 1.5mm; }
+  .ni-table td:first-child, .ni-table th:first-child { text-align: left; width: 30%; font-weight: 600; color: var(--deep); }
+  .ni-table th:first-child { color: var(--gold-light); }
+  .sec-lead { font-size: 9.8pt; color: #444; margin: -2mm 0 4.5mm; line-height: 1.6; }
+</style>
+
+<!-- ======================= 1 · BÌA ======================= -->
+<section class="page cover">
+  <div class="cover__logo"><img src="img/logo.png" alt="Viên Ngọc Phương"></div>
+  <div class="cover__try"><img src="img/qr-demo.svg" alt=""><span><b>Xem thử website</b>Quét mã bằng<br>camera điện thoại</span></div>
+  <div class="cover__text">
+    <div class="cover__eyebrow">Tài liệu giới thiệu website</div>
+    <h1>Website<br>Viên Ngọc Phương<br><em>– tổng quan tính năng</em></h1>
+    <p class="cover__sub">Website bán trang sức ngọc phỉ thúy được làm riêng cho ngành ngọc: giúp khách tin tưởng, chọn đúng món, thanh toán dễ dàng – và giúp cửa hàng bán an toàn, không lo bán trùng món độc bản.</p>
+  </div>
+  <img class="cover__art" src="img/hero-cham-khac.png" alt="">
+  <div class="cover__meta"><span>Tháng 10/2026 · Bản chạy thử – cập nhật lần 3</span><span>Ngọc Phỉ Thúy · Viên Ngọc Phương · Việt Nam</span></div>
+</section>
+
+<!-- ======================= 2 · TÓM TẮT NỔI BẬT ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><div><span class="part__kicker">Đọc nhanh trong 1 phút</span><h2>10 điểm nổi bật của website</h2></div></div><span class="tag tag--special">★ Nổi bật</span></div>
+  <div class="hl-grid">
+    <div class="hl"><span class="hl__no">1</span><div><h3>Không bao giờ bán trùng</h3><p>Mỗi viên ngọc chỉ có một chiếc. Có khách đặt là món đó được <strong>giữ riêng tự động</strong> – người khác không đặt được nữa.</p></div></div>
+    <div class="hl"><span class="hl__no">2</span><div><h3>Giữ hàng bằng tiền cọc</h3><p>Khách chưa quyết ngay? Cọc 10% qua mã QR để <strong>giữ riêng món ngọc 24 giờ</strong>, có chính sách cọc rõ ràng.</p></div></div>
+    <div class="hl"><span class="hl__no">3</span><div><h3>Thanh toán quét mã QR</h3><p>Mã QR có sẵn số tiền và nội dung – khách chỉ cần quét. Tiền về là <strong>đơn tự chuyển sang “Đã thanh toán”</strong>.</p></div></div>
+    <div class="hl hl--new"><span class="hl__no">4</span><div><h3>Phiếu xác nhận cho khách <span class="new">MỚI</span></h3><p>Cọc hoặc thanh toán xong, khách <strong>tải phiếu (PDF / ảnh)</strong> làm bằng chứng. Phiếu có mã QR để kiểm tra thật – giả.</p></div></div>
+    <div class="hl hl--new"><span class="hl__no">5</span><div><h3>Khách tự tra cứu đơn <span class="new">MỚI</span></h3><p>Nhập mã đơn + số điện thoại là xem được trạng thái và tải lại phiếu – <strong>kể cả sau nhiều tháng</strong>.</p></div></div>
+    <div class="hl"><span class="hl__no">6</span><div><h3>Tra cứu giấy kiểm định</h3><p>Khách nhập mã trên giấy kiểm định để xem ngay kết quả và đúng món ngọc – <strong>an tâm ngọc thật</strong>.</p></div></div>
+    <div class="hl"><span class="hl__no">7</span><div><h3>Soi vân ngọc, xem video thật</h3><p>Phóng to từng vùng ảnh để xem vân, độ trong; có video ngọc dưới ánh sáng thật. Trên điện thoại <strong>chạm để soi</strong>.</p></div></div>
+    <div class="hl hl--new"><span class="hl__no">8</span><div><h3>Tìm vòng, nhẫn vừa tay <span class="new">MỚI</span></h3><p>Khách nhập số đo bàn tay hoặc ngón tay – website <strong>tự tính ni</strong> và chỉ hiện những món vừa.</p></div></div>
+    <div class="hl"><span class="hl__no">9</span><div><h3>Hợp mệnh &amp; “Chọn quà giúp tôi”</h3><p>Nhập năm sinh để biết mệnh và màu ngọc hợp. Trả lời 3 câu hỏi là có <strong>gợi ý quà đúng người, đúng dịp</strong>.</p></div></div>
+    <div class="hl hl--new"><span class="hl__no">10</span><div><h3>Mua dễ trên điện thoại <span class="new">MỚI</span></h3><p>Giỏ hàng và đặt hàng gọn trên một trang, nút “Đặt hàng” luôn trong tầm tay, banner thiết kế riêng cho điện thoại.</p></div></div>
+  </div>
+  <div class="try"><img src="img/qr-demo.svg" alt=""><div><h3>Xem thử ngay trên điện thoại</h3><p>Quét mã bằng camera để mở bản chạy thử: <b>vienngocphuong-demo.netlify.app</b>. Bản chạy thử dùng dữ liệu mẫu – có thể đặt hàng, giữ hàng, xem phiếu thử mà không phải chuyển tiền thật.</p></div></div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>2</b></div>
+</section>
+
+<!-- ======================= 3 · TỔNG QUAN ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><div><span class="part__kicker">Tổng quan</span><h2>Một website bán ngọc – không chỉ là cửa hàng online</h2></div></div></div>
+  <p class="lead">Khách mua ngọc qua mạng thường có ba nỗi lo: <strong>ngọc có thật không</strong>, <strong>món nào hợp với mình hoặc người được tặng</strong>, và <strong>chuyển tiền rồi có chắc chắn không</strong>. Website Viên Ngọc Phương được làm để trả lời cả ba – bên cạnh đầy đủ chức năng của một trang bán hàng.</p>
+  <div class="pillars">
+    <div class="pillar"><div class="pillar__icon">◆</div><h3>Tạo niềm tin</h3><p>Giấy kiểm định tra được, video ngọc thật, soi vân, phiếu xác nhận có mã kiểm tra, khách tự tra cứu đơn.</p></div>
+    <div class="pillar"><div class="pillar__icon">◇</div><h3>Bán món độc bản an toàn</h3><p>Tự giữ món khi có khách đặt, giữ hàng bằng tiền cọc, tự mở bán lại khi khách không thanh toán.</p></div>
+    <div class="pillar"><div class="pillar__icon">❖</div><h3>Tư vấn thay người bán</h3><p>Tính ni vòng, ni nhẫn, tra mệnh chọn màu ngọc, gợi ý quà theo người nhận và ngân sách, đặt lịch xem tận tay.</p></div>
+    <div class="pillar"><div class="pillar__icon">✦</div><h3>Vận hành nhẹ nhàng</h3><p>Báo đơn qua Telegram, xác nhận bằng một lần bấm, lưu đơn ra Excel, chạy trên hosting thông thường.</p></div>
+  </div>
+  <div class="legend">
+    <div><span class="tag tag--special">★ Nổi bật</span><span>Tính năng riêng cho ngành ngọc – ít website trang sức có</span></div>
+    <div><span class="new" style="margin:0">MỚI</span><span>Mới bổ sung trong lần cập nhật này</span></div>
+    <div><span class="tag tag--setup">Cần cài đặt</span><span>Cần đăng ký tài khoản / điền mã khi đưa lên hosting</span></div>
+    <div><span class="tag tag--ready">Đã hoạt động</span><span>Mọi tính năng khác đều đã chạy trên bản chạy thử</span></div>
+  </div>
+  <ul class="toc">
+    <li><span class="n">1</span><span class="t">Bán món độc bản an toàn</span><span class="d">Độc bản, tự giữ món khi có khách đặt, giữ hàng – đặt cọc</span><span class="p">tr. 4</span></li>
+    <li><span class="n">2</span><span class="t">Thanh toán &amp; sau khi mua</span><span class="d">Mã QR, tự xác nhận tiền, phiếu xác nhận, tra cứu đơn</span><span class="p">tr. 6</span></li>
+    <li><span class="n">3</span><span class="t">Tư vấn chọn ngọc</span><span class="d">Kiểm định, soi vân, ni vòng – nhẫn, hợp mệnh, quà tặng</span><span class="p">tr. 8</span></li>
+    <li><span class="n">4</span><span class="t">Mua sắm trên điện thoại</span><span class="d">Giao diện riêng cho điện thoại, banner dọc, đặt hàng một trang</span><span class="p">tr. 11</span></li>
+    <li><span class="n">5</span><span class="t">Vận hành cho cửa hàng</span><span class="d">Nhận tin, link quản lý đơn, lưu trữ, tự xác nhận tiền</span><span class="p">tr. 12</span></li>
+    <li><span class="n">6</span><span class="t">Bán hàng &amp; tiếp thị</span><span class="d">Danh mục, bộ lọc, giỏ hàng, Google, quảng cáo</span><span class="p">tr. 13</span></li>
+    <li><span class="n">7</span><span class="t">Nền tảng &amp; bước tiếp theo</span><span class="d">Bảo mật, việc cần chuẩn bị, trang quản trị</span><span class="p">tr. 14</span></li>
+  </ul>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>3</b></div>
+</section>
+
+<!-- ======================= 4 · PHẦN 1: ĐỘC BẢN ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">1</span><div><span class="part__kicker">Phần 1</span><h2>Bán món độc bản an toàn</h2></div></div><span class="tag tag--special">★ Nổi bật</span></div>
+  <p class="sec-lead">Mỗi viên ngọc tự nhiên chỉ có một chiếc. Bán qua mạng, điều cửa hàng sợ nhất là <strong>hai khách cùng chuyển tiền cho một món</strong>. Website xử lý việc này tự động.</p>
+
+  <div class="split" style="grid-template-columns: 1fr 1fr; margin-bottom: 7mm">
+    <div>
+      <div class="feat__head"><span class="feat__no">1</span><div><h3>Nhãn “Độc bản” &amp; món “Đã có chủ”</h3></div></div>
+      <ul>
+        <li>Món độc bản có nhãn riêng, <strong>mỗi đơn chỉ mua được 1 chiếc</strong>.</li>
+        <li>Bán rồi, món ngọc <strong>không biến mất</strong> mà chuyển thành “Đã có chủ”, kèm nút <strong>“Tìm mẫu tương tự”</strong> (nhắn Zalo hoặc để lại liên hệ) – vừa giữ chân khách, vừa cho thấy cửa hàng bán được nhiều.</li>
+      </ul>
+      <div class="feat__head" style="margin-top:4mm"><span class="feat__no">2</span><div><h3>Tự giữ món khi có khách đặt</h3></div></div>
+      <p class="feat__why">Hai khách cùng ưng một món, cùng chuyển tiền – cửa hàng phải xin lỗi và hoàn tiền một người.</p>
+      <p>Ngay khi khách bấm đặt hàng, món độc bản được <strong>giữ riêng cho khách đó</strong>. Khách khác vào xem sẽ thấy rõ “Một khách hàng vừa đặt mua món này” hoặc “Đã có khách đặt cọc” – và không đặt trùng được.</p>
+    </div>
+    <div><img class="shot" src="img/product-held.jpg" alt=""><div class="cap">Món đang được giữ: khách khác thấy rõ trạng thái, có nút “Báo tôi khi mở bán” và “Xem mẫu tương tự”</div></div>
+  </div>
+
+  <table class="rules">
+    <tr><th style="width:30%">Trường hợp</th><th>Website tự làm gì</th></tr>
+    <tr><td>Khách đặt &amp; chuyển khoản</td><td>Giữ món <strong>60 phút</strong> chờ tiền về. Đã nhận tiền → giữ tới khi giao hàng.</td></tr>
+    <tr><td>Khách đặt trả tiền khi nhận (COD)</td><td>Giữ món tối đa <strong>24 giờ</strong> để cửa hàng gọi xác nhận. Đã xác nhận → giữ tới khi giao.</td></tr>
+    <tr><td>Khách không thanh toán</td><td>Hết giờ, món <strong>tự mở bán lại</strong> – không bị khóa mãi.</td></tr>
+    <tr><td>Khách chuyển tiền quá muộn</td><td>Trang của khách báo cửa hàng sẽ liên hệ đổi mẫu hoặc hoàn tiền; cửa hàng nhận cảnh báo ngay.</td></tr>
+  </table>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>4</b></div>
+</section>
+
+<!-- ======================= 5 · PHẦN 1: GIỮ HÀNG – ĐẶT CỌC ======================= -->
+<section class="page">
+  <div class="feat feat--wide" style="margin-bottom:4mm">
+    <div>
+      <div class="feat__head"><span class="feat__no">3</span><div><h3>Giữ hàng – đặt cọc</h3><div class="feat__tags"><span class="tag tag--special">★ Nổi bật</span></div></div></div>
+      <p class="feat__why">Món ngọc vài chục triệu, khách cần thời gian cân nhắc – nhưng sợ người khác mua mất.</p>
+      <p>Với món từ 10 triệu (cửa hàng tự chọn mức), khách bấm <strong>“Giữ hàng 24 giờ”</strong> và đặt cọc 10%. Chỉ 3 bước:</p>
+      <div class="steps3">
+        <div><b>BƯỚC 1</b>Khách điền tên, số điện thoại, đánh dấu đồng ý <strong>Chính sách đặt cọc</strong> → món được giữ tạm 60 phút.</div>
+        <div><b>BƯỚC 2</b>Khách quét <strong>mã QR</strong> chuyển cọc. Tiền về là xác nhận – món được giữ riêng 24 giờ.</div>
+        <div><b>BƯỚC 3</b>Khách nhận <strong>phiếu xác nhận đặt cọc</strong>. Tiền cọc được trừ vào giá khi mua.</div>
+      </div>
+    </div>
+  </div>
+  <div class="split split--wide-r">
+    <div>
+      <h3 style="font-size:12pt;margin-bottom:2mm">Rõ ràng cho cả hai bên</h3>
+      <ul class="pill-list">
+        <li>Chính sách đặt cọc có trang riêng: thời gian giữ, gia hạn, hoàn cọc – khách đọc và đồng ý trước khi cọc.</li>
+        <li>Cửa hàng có thể <strong>gia hạn thêm 24 giờ</strong> chỉ với một lần bấm.</li>
+        <li>Không cọc trong 60 phút → món tự mở bán lại. Mỗi số điện thoại chỉ được 1 yêu cầu chờ cọc – chống giữ hàng ảo.</li>
+        <li>Trang của khách <strong>tự cập nhật</strong> khi cửa hàng nhận được cọc, không cần tải lại.</li>
+      </ul>
+      <p class="mini">Xác nhận cọc: cửa hàng bấm nút trong tin báo, hoặc tự động khi tiền vào tài khoản <span class="tag tag--setup">Cần cài đặt</span></p>
+    </div>
+    <div><img class="shot" src="img/hold-pending.jpg" alt=""><div class="cap">Sau khi gửi yêu cầu: thông tin giữ hàng, các bước và mã QR chuyển cọc</div></div>
+  </div>
+  <div class="group" style="margin-top:6mm">Chính sách đặt cọc – tóm tắt</div>
+  <table class="rules">
+    <tr><td>Thời gian giữ</td><td><strong>24 giờ</strong> kể từ khi cửa hàng nhận cọc, <strong>giá giữ nguyên</strong>; gia hạn miễn phí 1 lần thêm 24 giờ.</td></tr>
+    <tr><td>Sản phẩm không đúng mô tả</td><td>Hoàn <strong>100% tiền cọc</strong>.</td></tr>
+    <tr><td>Cửa hàng hủy / bán cho người khác</td><td>Hoàn tiền cọc và <strong>trả thêm một khoản bằng tiền cọc</strong>.</td></tr>
+    <tr><td>Khách đổi ý, báo trước hạn</td><td>Tiền cọc thành <strong>phiếu mua hàng</strong>, dùng trong 6 tháng cho mọi sản phẩm.</td></tr>
+    <tr><td>Khách không báo, không mua</td><td>Tiền cọc thuộc cửa hàng, món ngọc được mở bán lại.</td></tr>
+    <tr><td>Hoàn tiền</td><td>Trong 3 ngày làm việc, không trừ phí, về đúng tài khoản đã chuyển cọc.</td></tr>
+  </table>
+  <p class="mini" style="margin-top:2mm">Các con số do cửa hàng tự chỉnh. Chính sách soạn theo Bộ luật Dân sự 2015 – nên nhờ luật sư hoặc kế toán xem lại trước khi dùng thật.</p>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>5</b></div>
+</section>
+
+<!-- ======================= 6 · PHẦN 2: THANH TOÁN QR ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">2</span><div><span class="part__kicker">Phần 2</span><h2>Thanh toán &amp; sau khi mua</h2></div></div><span class="tag tag--special">★ Nổi bật</span></div>
+  <div class="feat__head"><span class="feat__no">4</span><div><h3>Thanh toán bằng mã QR – tiền về là đơn tự cập nhật</h3></div></div>
+  <p>Khách chọn <strong>trả tiền khi nhận hàng (COD)</strong> hoặc <strong>chuyển khoản</strong>. Với chuyển khoản, khách luôn biết đơn của mình đang ở bước nào:</p>
+  <div class="steps3">
+    <div><b>1 · ĐẶT ĐƠN</b>Khách nhận <strong>mã đơn</strong> và <strong>mã QR</strong> có sẵn số tiền, nội dung – không phải gõ tay, không nhầm số.</div>
+    <div><b>2 · QUÉT MÃ</b>Dùng app ngân hàng bất kỳ. Trên điện thoại: nhấn giữ mã QR → lưu ảnh → quét trong app.</div>
+    <div><b>3 · TIỀN VỀ</b>Trang tự chuyển sang <strong>“Đã nhận thanh toán”</strong>. Chuyển thiếu → trang báo số tiền còn thiếu.</div>
+  </div>
+  <div class="duo">
+    <div><img class="shot" style="height:auto" src="img/order-pending.jpg" alt=""><div class="cap">Ngay sau khi đặt: mã QR, chi tiết đơn, món độc bản đang được giữ</div></div>
+    <div><img class="shot" style="height:auto" src="img/order-paid.jpg" alt=""><div class="cap">Khi tiền về: “Đã nhận thanh toán” và nút xem phiếu xác nhận</div></div>
+  </div>
+  <div class="cols">
+    <div class="box"><h3>Tự xác nhận tiền vào <span class="tag tag--setup">Cần cài đặt</span></h3><p style="margin:0">Kết nối dịch vụ theo dõi giao dịch ngân hàng: tiền về đúng mã đơn là <strong>tự đánh dấu đã thanh toán</strong> – cửa hàng không phải mở app ngân hàng đối chiếu từng khoản.</p></div>
+    <div class="box"><h3>Chưa kết nối vẫn dùng được</h3><p style="margin:0">Cửa hàng bấm <strong>“Xác nhận đã nhận đủ tiền”</strong> trong tin báo đơn hàng – trang của khách cập nhật ngay.</p></div>
+  </div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>6</b></div>
+</section>
+
+<!-- ======================= 7 · PHẦN 2: PHIẾU & TRA CỨU ======================= -->
+<section class="page">
+  <div class="split split--wide-l" style="margin-bottom:5mm">
+    <div>
+      <div class="feat__head"><span class="feat__no">5</span><div><h3>Phiếu xác nhận cho khách</h3><div class="feat__tags"><span class="tag tag--special">★ Nổi bật</span><span class="new" style="margin:0">MỚI</span></div></div></div>
+      <p class="feat__why">Chuyển vài chục triệu cho cửa hàng online, khách cần một tờ giấy làm bằng chứng.</p>
+      <p>Khi cửa hàng nhận cọc, nhận tiền hoặc xác nhận đơn COD, website <strong>tự lập phiếu xác nhận</strong> cho khách:</p>
+      <ul class="pill-list">
+        <li><strong>Tải PDF</strong> hoặc <strong>lưu ảnh</strong> vào điện thoại chỉ với một lần bấm.</li>
+        <li>Ghi rõ món ngọc, số tiền, thời gian, mã giao dịch, chính sách đổi trả – cọc.</li>
+        <li>Có <strong>mã QR kiểm tra</strong>: quét là mở đúng phiếu trên website – phân biệt phiếu thật, phiếu giả.</li>
+        <li>Số điện thoại, địa chỉ được che bớt – an toàn khi khách chia sẻ.</li>
+        <li>Khách có email nhận phiếu qua email; phiếu được <strong>lưu lâu dài</strong> để đối chiếu khi bảo hành.</li>
+      </ul>
+      <p class="mini">Cửa hàng chưa xác nhận thì nút “Xem phiếu” hiện trạng thái chờ, và tự chuyển thành phiếu ngay khi cửa hàng xác nhận.</p>
+    </div>
+    <div><img class="shot" src="img/receipt.jpg" alt=""><div class="cap">Phiếu xác nhận thanh toán (dữ liệu mẫu)</div></div>
+  </div>
+  <div class="split split--wide-r" style="align-items:center">
+    <div>
+      <div class="feat__head"><span class="feat__no">6</span><div><h3>Khách tự tra cứu đơn hàng</h3><div class="feat__tags"><span class="new" style="margin:0">MỚI</span></div></div></div>
+      <p class="feat__why">Khách đóng trang, không để lại email – vài tháng sau muốn xem lại đơn.</p>
+      <ul class="pill-list">
+        <li>Mục <strong>“Tra cứu đơn”</strong> trên menu: nhập mã đơn + số điện thoại là xem được trạng thái, tải lại phiếu.</li>
+        <li>Đơn đã đặt trên máy được nhớ sẵn – <strong>bấm là mở</strong>.</li>
+        <li>Khi đơn đổi trạng thái, khách quay lại web sẽ thấy thông báo.</li>
+        <li>Đơn được lưu 2 năm, phiếu lưu lâu dài; có chống dò mã.</li>
+      </ul>
+    </div>
+    <div><img class="shot" src="img/lookup.jpg" alt=""><div class="cap">Trang tra cứu và danh sách đơn trên thiết bị này</div></div>
+  </div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>7</b></div>
+</section>
+
+<!-- ======================= 8 · PHẦN 3: KIỂM ĐỊNH & SOI VÂN ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">3</span><div><span class="part__kicker">Phần 3</span><h2>Tư vấn chọn ngọc – như người bán giỏi</h2></div></div><span class="tag tag--special">★ Nổi bật</span></div>
+  <div class="feat">
+    <div>
+      <div class="feat__head"><span class="feat__no">7</span><div><h3>Tra cứu giấy kiểm định</h3></div></div>
+      <p class="feat__why">Khách sợ nhất là mua phải ngọc giả, ngọc đã tẩy hoặc nhuộm.</p>
+      <p>Khách nhập <strong>mã in trên giấy kiểm định</strong>, website hiện ngay ảnh giấy, kết luận (ví dụ: ngọc phỉ thúy tự nhiên loại A), màu, kích thước, nơi kiểm định và <strong>đúng món ngọc tương ứng</strong>.</p>
+      <ul>
+        <li>Ô tra cứu có trên trang chủ và trang riêng.</li>
+        <li>Trang sản phẩm có link “Tra cứu” và tab Giấy kiểm định.</li>
+        <li>Gõ chữ hoa, chữ thường, có hay không gạch nối đều tìm được.</li>
+      </ul>
+    </div>
+    <div><img class="shot" src="img/cert.jpg" alt=""><div class="cap">Kết quả tra cứu giấy kiểm định (dữ liệu mẫu)</div></div>
+  </div>
+  <div class="feat feat--rev" style="grid-template-columns: 1.1fr 1fr">
+    <div>
+      <div class="feat__head"><span class="feat__no">8</span><div><h3>Soi vân ngọc &amp; video thật</h3></div></div>
+      <p class="feat__why">Độ trong (“thủy”) và vân ngọc rất khó thấy qua ảnh chụp thường.</p>
+      <ul>
+        <li><strong>Máy tính:</strong> rê chuột lên ảnh để phóng to từng vùng; bấm để mở trình soi toàn màn hình.</li>
+        <li><strong>Điện thoại:</strong> chạm vào ảnh để soi, dùng 2 ngón tay phóng to, kéo để xem vân, vuốt ngang xem ảnh khác.</li>
+        <li><strong>Video</strong> ngay cạnh ảnh: file video hoặc link YouTube.</li>
+        <li>Ảnh thứ hai (đeo trên tay, soi đèn…) hiện khi rê chuột, hoặc vuốt ngang trên điện thoại.</li>
+      </ul>
+    </div>
+    <div class="phones"><img class="shot" src="img/mobile-c.jpg" alt=""><div class="cap">Trên điện thoại: vuốt xem ảnh, chạm để soi vân</div></div>
+  </div>
+  <div class="split split--wide-r" style="align-items:center">
+    <div>
+      <div class="feat__head"><span class="feat__no">9</span><div><h3>Chọn màu ngọc hợp mệnh</h3></div></div>
+      <ul class="pill-list" style="margin:0">
+        <li>Nhập năm sinh âm lịch → biết <strong>mệnh ngũ hành</strong>, màu hợp, màu nên tránh.</li>
+        <li>Một nút bấm để xem ngay các món hợp mệnh; lọc sản phẩm theo 5 mệnh.</li>
+        <li>Nhắc khách sinh trước Tết nhập năm âm lịch trước đó.</li>
+      </ul>
+    </div>
+    <div><img class="shot" src="img/menh.jpg" alt=""><div class="cap">Năm 1990 → mệnh Thổ: màu hợp, màu nên tránh, gợi ý ngọc</div></div>
+  </div>
+
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>8</b></div>
+</section>
+
+<!-- ======================= 9 · PHẦN 3: NI & MỆNH ======================= -->
+<section class="page">
+  <div class="feat__head"><span class="feat__no">10</span><div><h3>Tìm vòng, nhẫn vừa tay</h3><div class="feat__tags"><span class="new" style="margin:0">MỚI: ni nhẫn &amp; cỡ chuỗi</span></div></div></div>
+  <p class="feat__why">“Tay tôi đeo ni bao nhiêu?” – câu khách hỏi nhiều nhất khi mua vòng và nhẫn.</p>
+  <div class="split" style="margin-bottom:3mm">
+    <div>
+      <ul class="pill-list">
+        <li><strong>Vòng tay:</strong> nhập chu vi bàn tay (cm) → website tính ni vòng và <strong>chỉ hiện những chiếc vừa tay</strong>.</li>
+        <li><strong>Nhẫn:</strong> nhập chu vi ngón tay hoặc đường kính chiếc nhẫn đang đeo – nhập cm hay mm đều được – website tính <strong>ni nhẫn theo bảng ni Việt Nam</strong>.</li>
+        <li><strong>Chuỗi hạt:</strong> nhập cổ tay → gợi ý độ dài chuỗi nên chọn.</li>
+        <li>Trang từng sản phẩm báo <strong>“mẫu này có ni của bạn”</strong> hoặc vừa / chật / rộng, kèm hướng dẫn đo.</li>
+      </ul>
+    </div>
+    <div><img class="shot" src="img/size.jpg" alt=""><div class="cap">Chu vi bàn tay 17,5 cm → chỉ hiện vòng ni 56–58 mm</div></div>
+  </div>
+  <img class="shot" src="img/ring.jpg" alt="" style="margin-bottom:1mm"><div class="cap" style="margin-bottom:5mm">Tab “Chọn ni nhẫn”: hướng dẫn đo và ô tính ni – chu vi ngón tay 54 mm → ni 14</div>
+  <div class="group">Bảng ni nhẫn tham khảo (website tự quy đổi)</div>
+  <table class="ni-table"><tr><th>Ni nhẫn</th><td>8</td><td>10</td><td>12</td><td>14</td><td>16</td><td>18</td><td>20</td><td>22</td></tr><tr><td>Chu vi ngón tay (mm)</td><td>48,2</td><td>50,3</td><td>52,4</td><td>54,5</td><td>56,6</td><td>58,6</td><td>60,7</td><td>62,8</td></tr><tr><td>Đường kính lòng nhẫn (mm)</td><td>15,3</td><td>16,0</td><td>16,7</td><td>17,3</td><td>18,0</td><td>18,7</td><td>19,3</td><td>20,0</td></tr></table>
+  <p class="mini" style="margin-top:2mm">Theo bảng ni Việt Nam: mỗi ni hơn kém khoảng 1 mm chu vi. Cửa hàng nên đối chiếu với bảng ni của thợ làm nhẫn.</p>
+
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>9</b></div>
+</section>
+
+<!-- ======================= 10 · PHẦN 3: QUÀ TẶNG & ĐẶT LỊCH ======================= -->
+<section class="page">
+  <div class="feat__head"><span class="feat__no">11</span><div><h3>“Chọn quà giúp tôi” &amp; quà theo dịp</h3></div></div>
+  <p class="feat__why">Phần lớn khách mua ngọc để tặng – nhưng không biết chọn món nào.</p>
+  <p>Khách trả lời <strong>3 câu hỏi</strong>: tặng ai, năm sinh người nhận, ngân sách. Website gợi ý những món <strong>đúng dịp</strong>, <strong>hợp mệnh</strong> người nhận (món màu kỵ mệnh bị loại) và <strong>vừa túi tiền</strong>.</p>
+  <img class="shot" src="img/gift.jpg" alt="" style="margin-bottom:1mm"><div class="cap" style="margin-bottom:2.5mm">Gợi ý quà tặng mẹ sinh năm 1968 (mệnh Thổ), ngân sách 3–10 triệu</div>
+  <p style="margin-bottom:1mm"><strong>6 bộ sưu tập quà theo dịp</strong> có trên menu và trang chủ:</p>
+  <div class="chips"><span class="chip">Trao dâu – của hồi môn</span><span class="chip">Mừng thọ</span><span class="chip">Tặng mẹ</span><span class="chip">Đầy tháng, thôi nôi</span><span class="chip">Tân gia – khai trương</span><span class="chip">Người thương</span></div>
+
+  <div class="split" style="margin-top:4mm">
+    <div>
+      <div class="feat__head"><span class="feat__no">12</span><div><h3>Đặt lịch xem ngọc tận tay</h3></div></div>
+      <p>Món giá trị cao, khách muốn xem và đeo thử trước. Khách chọn <strong>ngày, khung giờ</strong> và món quan tâm – cửa hàng nhận tin để chuẩn bị sẵn mẫu theo ngân sách, ni tay.</p>
+      <div class="feat__head" style="margin-top:3mm"><span class="feat__no">13</span><div><h3>Dịch vụ quà tặng khi đặt hàng</h3></div></div>
+      <p>Ngay trong giỏ hàng: <strong>thiệp viết tay</strong> (nhập lời nhắn), <strong>hộp quà cao cấp</strong>, <strong>giao hỏa tốc</strong> 2–4 giờ nội thành. Phí tự cộng vào tổng tiền.</p>
+      <div class="feat__head" style="margin-top:3mm"><span class="feat__no">14</span><div><h3>Khách đeo thật</h3></div></div>
+      <p style="margin:0">Mục ảnh và cảm nhận của khách đã mua trên trang chủ. <strong>Tự ẩn khi chưa có</strong> – website không bao giờ hiện cảm nhận “dựng sẵn”.</p>
+    </div>
+    <div><img class="shot" src="img/appt.jpg" alt=""><div class="cap">Trang đặt lịch xem ngọc: chọn ngày, giờ và món quan tâm</div></div>
+  </div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>10</b></div>
+</section>
+
+<!-- ======================= 11 · PHẦN 4: ĐIỆN THOẠI ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">4</span><div><span class="part__kicker">Phần 4 <span class="new">MỚI</span></span><h2>Mua sắm trên điện thoại</h2></div></div><span class="tag tag--special">★ Nổi bật</span></div>
+  <p class="sec-lead">Phần lớn khách xem hàng qua Facebook, Zalo trên điện thoại. Giao diện điện thoại được <strong>thiết kế và kiểm tra riêng</strong> trên iPhone và Android – chữ không vỡ dòng, nút không bị che, không phải kéo ngang.</p>
+  <div class="phones" style="text-align:center"><img class="shot" style="width:150mm;margin:0 auto" src="img/mobile-a.jpg" alt=""><div class="cap" style="margin-bottom:3mm">Banner thiết kế riêng cho điện thoại · trang sản phẩm · giỏ hàng có thanh “Đặt hàng” cố định</div></div>
+  <div class="cols" style="gap:1mm 7mm;margin-bottom:3mm">
+    <ul class="pill-list" style="margin:0">
+      <li><strong>Banner dọc riêng</strong> cho điện thoại – hiện trọn ảnh, máy tính vẫn dùng banner ngang.</li>
+      <li>Vuốt ngang trên thẻ sản phẩm để xem ảnh thứ hai.</li>
+      <li>Giỏ hàng và đặt hàng <strong>trên cùng một trang</strong>; thanh tổng tiền + nút “Đặt hàng” luôn ở đáy màn hình.</li>
+    </ul>
+    <ul class="pill-list" style="margin:0">
+      <li>Quên chọn cách thanh toán? Website báo rõ và đưa khách tới đúng ô cần điền.</li>
+      <li><strong>Mã QR hiện ngay đầu trang</strong> sau khi đặt, kèm hướng dẫn lưu ảnh để quét.</li>
+      <li>Nút Zalo, Gọi luôn sẵn; tự ẩn ở trang thanh toán để không che nội dung.</li>
+    </ul>
+  </div>
+  <div class="phones" style="text-align:center"><img class="shot" style="width:150mm;margin:0 auto" src="img/mobile-b.jpg" alt=""><div class="cap">Sau khi đặt: mã QR chuyển khoản · phiếu xác nhận (tải PDF, lưu ảnh) · tra cứu đơn</div></div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>11</b></div>
+</section>
+
+<!-- ======================= 12 · PHẦN 5: VẬN HÀNH ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">5</span><div><span class="part__kicker">Phần 5</span><h2>Vận hành cho cửa hàng</h2></div></div></div>
+  <div class="split split--wide-l" style="margin-bottom:5mm">
+    <div>
+      <div class="box" style="margin-bottom:4mm"><h3>Nhận tin tức thì <span class="tag tag--setup">Cần cài đặt</span></h3>
+        <p style="margin:0">Có <strong>đơn hàng, yêu cầu giữ hàng, lịch hẹn, tin nhắn liên hệ</strong> hoặc <strong>tiền vào</strong> là cửa hàng nhận tin qua <strong>Telegram</strong> (miễn phí) và email. Tạo bot Telegram chỉ mất khoảng 5 phút.</p></div>
+      <div class="box"><h3>Quản lý đơn bằng một lần bấm</h3>
+        <p>Mỗi tin báo kèm <strong>link quản lý riêng</strong> – mở trên điện thoại là thao tác được:</p>
+        <ul class="pill-list" style="margin:0">
+          <li>Xác nhận đã nhận tiền / đã nhận cọc / xác nhận đơn COD.</li>
+          <li>Gia hạn giữ hàng, hủy đơn – mở bán lại món ngay.</li>
+          <li><strong>Gửi link đơn cho khách qua Zalo</strong> hoặc sao chép link.</li>
+        </ul>
+        <p class="mini" style="margin-top:1.5mm">Link có mã bảo mật riêng từng đơn – người ngoài không mở được.</p>
+      </div>
+    </div>
+    <div><img class="shot" src="img/manage.jpg" alt=""><div class="cap">Trang quản lý đơn của cửa hàng (mở từ link trong tin báo)</div></div>
+  </div>
+  <div class="cols">
+    <div class="box"><h3>Lưu trữ bằng Excel</h3><p style="margin:0">Đơn hàng, giữ hàng, lịch hẹn, liên hệ, giao dịch được lưu thành file theo tháng, <strong>mở bằng Excel</strong>. Thư mục dữ liệu được khóa, người ngoài không xem được.</p></div>
+    <div class="box"><h3>Tự xác nhận tiền vào <span class="tag tag--setup">Cần cài đặt</span></h3><p style="margin:0">Kết nối dịch vụ theo dõi giao dịch ngân hàng: tiền về đúng mã là tự xác nhận cọc, tự đánh dấu đơn đã thanh toán; chuyển thiếu thì báo cửa hàng.</p></div>
+    <div class="box"><h3>Lưu đơn lâu dài</h3><p style="margin:0">Đơn hàng giữ 2 năm (đổi được), phiếu xác nhận lưu lâu dài – đủ cho bảo hành và đối chiếu.</p></div>
+    <div class="box"><h3>Không cần máy chủ riêng</h3><p style="margin:0">Chạy trên hosting thông thường tại Việt Nam, không cần cơ sở dữ liệu – chi phí duy trì thấp.</p></div>
+  </div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>12</b></div>
+</section>
+
+<!-- ======================= 13 · PHẦN 6: CƠ BẢN & TIẾP THỊ ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">6</span><div><span class="part__kicker">Phần 6</span><h2>Chức năng bán hàng &amp; tiếp thị</h2></div></div><span class="tag tag--basic">Cơ bản</span></div>
+  <div class="split" style="grid-template-columns: 1.25fr 1fr; margin-bottom:5mm">
+    <div><img class="shot" src="img/shop.jpg" alt=""><div class="cap">Trang sản phẩm: lọc theo danh mục, mệnh, khoảng giá – món đang được giữ có nhãn riêng</div></div>
+    <div style="display:grid;gap:4mm">
+    <div class="box"><h3>Tìm sản phẩm</h3><ul>
+      <li>6 danh mục: vòng tay, mặt dây chuyền, nhẫn, bông tai, chuỗi hạt, vật phẩm phong thủy.</li>
+      <li>Lọc theo danh mục, mệnh, khoảng giá; sắp xếp theo mới nhất, giá, tên.</li>
+      <li>Tìm kiếm gõ có dấu hay không dấu đều ra.</li>
+    </ul></div>
+    <div class="box"><h3>Tiện ích mua sắm</h3><ul>
+      <li>Mỗi thẻ sản phẩm có nút <strong>Xem chi tiết</strong> rõ ràng và nút giỏ hàng để thêm nhanh.</li>
+      <li><strong>Yêu thích</strong> (trái tim) và <strong>xem nhanh</strong> (con mắt) không rời trang.</li>
+      <li>Giỏ hàng lưu trên máy khách – <strong>không cần đăng ký tài khoản</strong>.</li>
+      <li>Giá luôn tính lại theo dữ liệu cửa hàng – khách không thể tự sửa giá.</li>
+    </ul></div>
+    </div>
+  </div>
+  <table>
+    <tr><th style="width:30%">Tiếp thị &amp; Google</th><th>Mô tả</th><th style="width:19%">Trạng thái</th></tr>
+    <tr><td><strong>Tối ưu tìm kiếm Google</strong></td><td>Tiêu đề, mô tả riêng từng trang; dữ liệu sản phẩm (giá, tình trạng) để Google hiển thị đẹp hơn.</td><td><span class="tag tag--ready">Đã hoạt động</span></td></tr>
+    <tr><td><strong>Sơ đồ trang (sitemap)</strong></td><td>Tự cập nhật khi thêm sản phẩm, bài viết; khai báo một lần với Google.</td><td><span class="tag tag--ready">Đã hoạt động</span></td></tr>
+    <tr><td><strong>Chia sẻ Facebook / Zalo</strong></td><td>Link sản phẩm khi chia sẻ hiện đúng ảnh, tên và giá.</td><td><span class="tag tag--ready">Đã hoạt động</span></td></tr>
+    <tr><td><strong>Cẩm nang &amp; chính sách</strong></td><td>Bài viết kiến thức ngọc, 6 trang chính sách (bảo hành, đổi trả, vận chuyển, thanh toán, đặt cọc, bảo mật).</td><td><span class="tag tag--ready">Đã hoạt động</span></td></tr>
+    <tr><td><strong>Google Shopping miễn phí</strong></td><td>Sản phẩm hiện kèm ảnh và giá khi khách tìm trên Google.</td><td><span class="tag tag--setup">Cần cài đặt</span></td></tr>
+    <tr><td><strong>Đo lường quảng cáo</strong></td><td>Google Analytics, Facebook Pixel, TikTok Pixel: ghi nhận xem sản phẩm, thêm giỏ, mua hàng.</td><td><span class="tag tag--setup">Cần cài đặt</span></td></tr>
+    <tr><td><strong>Zalo OA</strong></td><td>Mời khách “Quan tâm” trang Zalo của cửa hàng để nhận hàng mới, ưu đãi.</td><td><span class="tag tag--setup">Cần cài đặt</span></td></tr>
+  </table>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>13</b></div>
+</section>
+
+<!-- ======================= 14 · PHẦN 7: NỀN TẢNG & BƯỚC TIẾP THEO ======================= -->
+<section class="page">
+  <div class="part"><div class="part__title"><span class="part__num">7</span><div><span class="part__kicker">Phần 7</span><h2>Nền tảng &amp; bước tiếp theo</h2></div></div></div>
+  <div class="cols" style="margin-bottom:6mm">
+    <div class="box"><h3>Nhanh &amp; đẹp trên mọi màn hình</h3><ul>
+      <li>Tự sắp xếp lại cho máy tính, máy tính bảng, điện thoại.</li>
+      <li>Ảnh được nén, chỉ tải khi cần – mở nhanh cả khi mạng yếu.</li>
+      <li>Màu xanh ngọc – vàng theo logo, hoạ tiết hoa sen, font chữ sang trọng.</li>
+    </ul></div>
+    <div class="box"><h3>An toàn dữ liệu</h3><ul>
+      <li>Chống spam và gửi biểu mẫu lặp lại; khóa thư mục dữ liệu.</li>
+      <li>Link quản lý, link xem đơn, phiếu xác nhận đều có <strong>mã bảo mật</strong> – không thể giả mạo.</li>
+      <li>Giá, tình trạng hàng luôn được kiểm tra lại khi đặt; an toàn khi nhiều khách đặt cùng lúc.</li>
+    </ul></div>
+  </div>
+  <table style="margin-bottom:5mm">
+    <tr><th style="width:30%">Việc cần chuẩn bị</th><th>Khi đưa website lên hosting</th></tr>
+    <tr><td><strong>Thông tin cửa hàng</strong></td><td>Hotline, Zalo, email, địa chỉ, tài khoản ngân hàng nhận tiền chính thức, thông tin in trên phiếu xác nhận.</td></tr>
+    <tr><td><strong>Sản phẩm &amp; nội dung</strong></td><td>Ảnh, giá, ni vòng – ni nhẫn, video, giấy kiểm định thật; banner máy tính và banner điện thoại.</td></tr>
+    <tr><td><strong>Nhận tin &amp; thanh toán</strong></td><td>Tạo bot Telegram, email theo tên miền; (tùy chọn) đăng ký dịch vụ tự xác nhận tiền vào.</td></tr>
+    <tr><td><strong>Google &amp; quảng cáo</strong></td><td>Bật https, khai báo với Google, Google Merchant Center, mã Analytics/Pixel, Zalo OA.</td></tr>
+    <tr><td><strong>Pháp lý</strong></td><td>Thông báo website thương mại điện tử với Bộ Công Thương (online.gov.vn); nhờ kế toán xem lại chính sách cọc và thuế.</td></tr>
+  </table>
+  <div class="closing">
+    <img src="img/logo.png" alt="">
+    <div>
+      <h3>Tiếp theo: Trang quản trị</h3>
+      <p>Giao diện bấm chọn để cửa hàng <strong style="color:#fff">tự sửa mọi chữ, con số, hình ảnh</strong> trên website – sản phẩm, banner, giấy kiểm định, chính sách, thông tin trên phiếu; xem và xử lý đơn hàng, giữ hàng, lịch hẹn; <strong style="color:#fff">chọn ngân hàng nhận tiền</strong>; bật/tắt <strong style="color:#fff">VAT</strong> trong báo giá – không cần sửa file.</p>
+    </div>
+  </div>
+  <div class="try" style="margin-top:4mm"><img src="img/qr-demo.svg" alt=""><div><h3>Xem thử website</h3><p>Quét mã hoặc mở <b>vienngocphuong-demo.netlify.app</b> – thử đặt hàng, giữ hàng, tải phiếu xác nhận với dữ liệu mẫu.</p></div></div>
+  <div class="foot"><span><img src="img/emblem.png" alt="">Viên Ngọc Phương · Tổng quan tính năng website</span><b>14</b></div>
+</section>
+
+</body>
+</html>

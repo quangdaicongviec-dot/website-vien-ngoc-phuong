@@ -1,0 +1,17 @@
+# ==================================================================
+#  Dữ liệu do website tạo ra – KHÔNG đưa lên GitHub
+#  (có thông tin khách hàng, mật khẩu đã mã hóa, khóa ký link). Dữ liệu chỉ nằm trên VPS
+#  và trong bản sao lưu (Trang quản trị → Sao lưu & khôi phục).
+# ==================================================================
+/data/don-hang/
+/data/noi-dung/
+/data/quan-tri/
+/assets/img/uploads/*
+!/assets/img/uploads/.htaccess
+/assets/videos/uploads/
+
+# Tệp tạm, tệp hệ thống
+.DS_Store
+*.tmp
+*.zip
+*.log

@@ -1,33 +1,58 @@
-name: Deploy to VPS
+# ==================================================================
+#  Tự đưa website lên VPS mỗi khi có thay đổi trên nhánh main
+#  (hoặc bấm "Run workflow" trong tab Actions để chạy lại bằng tay).
+#
+#  Cần các Secrets của repo (Settings → Secrets and variables → Actions):
+#    SSH_HOST, SSH_PORT, SSH_USERNAME (root), SSH_PASSWORD
+#
+#  Chỉ đưa MÃ NGUỒN lên /var/www/vienngocphuong. Dữ liệu do website tạo ra (đơn hàng, nội dung đã sửa,
+#  tài khoản quản trị, ảnh đã tải lên) KHÔNG nằm trong repo và KHÔNG bị ghi đè / xóa – xem cong-cu/vps/khong-dua-len.txt.
+# ==================================================================
+name: Đưa website lên VPS
 
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WEB_DIR: /var/www/vienngocphuong
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSHPASS: ${{ secrets.SSH_PASSWORD }}
     steps:
-      - name: Checkout code
+      - name: Lấy mã nguồn
         uses: actions/checkout@v4
 
-      - name: Copy files to VPS via SCP
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "."
-          target: "/var/www/html/website-vien-ngoc-phuong"
+      - name: Kiểm tra lỗi cú pháp PHP
+        run: |
+          php -v | head -1
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l > /dev/null
+          bash -n cong-cu/vps/cai-dat-may-chu.sh cong-cu/vps/cau-hinh-nginx.sh cong-cu/vps/tu-dong-ssl.sh
 
-      - name: Run commands on VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd /var/www/html/website-vien-ngoc-phuong
-            # Thêm các lệnh build hoặc restart ứng dụng của bạn ở đây nếu cần
+      - name: Chuẩn bị kết nối tới VPS
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass > /dev/null
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          # Khóa nhận diện của VPS – chống kết nối nhầm sang máy chủ giả mạo
+          echo "vienngocphuong-vps ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCW/+gePn3PrVbC+eARbRlc+93iy67pmqpGcCbjddBunIHPwHNtPclH/jvBMIdwPHCwfAmJ2r8ggkTc1sLLs2XP7tKzxvA8Z3eLFWX3QAZsj8aJcmBFc7F8HGMvzCTx7uAmVqaEKa/3p7MgBwQQLvzBDrAnPPkhgdV8hQypTREuvaEigkYVWekq8IExwtRNhxbqJTRPH06qRbuR/0WpRrEHxh809G9dicYZG7fZEKNgMGSGCykUIiZC1ri9+FMNzYmIT735z+06Yst+TrDSIEJnt/RQgz3pu3l8jFvNAmMFw67eWTYg5V0lPno6l7HVoLybfviVV2CdQMQgr6YlJgP66Q7JT5fcE7wsY8ezZm+y8FaEUFZHi/7SnMHWRPHnlaOjOFQX1Mg7a/n8kB1giH5iyHxClX2R634+PsNGDtJPRVGS+7DPb9nh032sdMfYzqCr6MNfkN5l29LIfhIclaT75C++MmKQnRmHxDdsiP2Hzaif3n81K39EIzCUxf4zUhM=" > ~/.ssh/known_hosts
+          echo "SSH_CMD=ssh -p ${SSH_PORT:-22} -o HostKeyAlias=vienngocphuong-vps -o StrictHostKeyChecking=yes -o PubkeyAuthentication=no -o ConnectTimeout=30 -o ServerAliveInterval=30" >> "$GITHUB_ENV"
+
+      - name: Đưa mã nguồn lên VPS (giữ nguyên dữ liệu và ảnh đã tải lên)
+        run: |
+          rsync -rlptz --delete --chmod=D755,F644 \
+            --exclude-from=cong-cu/vps/khong-dua-len.txt \
+            -e "sshpass -e $SSH_CMD" \
+            ./ "$SSH_USERNAME@$SSH_HOST:$WEB_DIR/"
+
+      - name: Cài đặt & kiểm tra trên VPS
+        run: sshpass -e $SSH_CMD "$SSH_USERNAME@$SSH_HOST" "bash $WEB_DIR/cong-cu/vps/cai-dat-may-chu.sh"

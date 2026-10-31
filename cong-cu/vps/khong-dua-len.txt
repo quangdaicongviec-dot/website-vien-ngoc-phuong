@@ -1,0 +1,18 @@
+# Danh sách KHÔNG đưa lên VPS khi deploy (rsync --exclude-from).
+# Các mục này trên VPS cũng KHÔNG bị xóa: dữ liệu do website tạo ra (đơn hàng, nội dung, tài khoản, ảnh đã tải lên)
+# và tài liệu nội bộ không cần cho website chạy.
+/.git/
+/.github/
+/.gitignore
+.DS_Store
+/data/don-hang/
+/data/noi-dung/
+/data/quan-tri/
+/assets/img/uploads/
+/assets/videos/uploads/
+/anh-goc/
+/tai-lieu/
+/*.md
+/Logo*.png
+/cong-cu/router.php
+/cong-cu/xuat-ban-netlify.py

@@ -1,0 +1,63 @@
+/* ==========================================================================
+   NHẬN DIỆN THƯƠNG HIỆU – HOA SEN (lấy từ logo Viên Ngọc Phương)
+   Muốn gỡ toàn bộ: xóa dòng nạp file này trong includes/header.php.
+   Hình vector nằm trong assets/img/brand/.
+   ========================================================================== */
+
+/* ---------- 1. Hoạ tiết — hoa sen — dưới tiêu đề mục ---------- */
+.section-head:not(.section-head--row) .section-title::after {
+  width: 180px; height: 24px; margin: 12px auto 0;
+  background: url("../img/brand/lotus-divider.svg") center / contain no-repeat;
+}
+.section-head--row .section-title::after {
+  content: ""; display: block; width: 144px; height: 25px; margin-top: 8px;
+  background: url("../img/brand/lotus-divider-left.svg") left center / contain no-repeat;
+}
+.page-hero__title::after {
+  content: ""; display: block; width: 136px; height: 24px; margin-top: 10px;
+  background: url("../img/brand/lotus-divider-left.svg") left center / contain no-repeat;
+}
+.page-hero--center .page-hero__title::after { margin-inline: auto; background-image: url("../img/brand/lotus-divider.svg"); background-position: center; width: 170px; }
+
+/* ---------- 2. Hoa sen nét mảnh làm nền mờ ---------- */
+.menh-section, .trust, .page-hero { position: relative; overflow: hidden; }
+.site-footer .footer-grid { position: relative; overflow: hidden; }
+.menh-section > *, .trust > *, .page-hero > *, .site-footer .footer-grid > * { position: relative; z-index: 1; }
+
+.menh-section::after, .trust::after, .site-footer .footer-grid::after, .page-hero::after {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  background: url("../img/brand/lotus-gold.svg") center / contain no-repeat;
+}
+/* Khối tra cứu mệnh: hoa sen lớn ở góc phải trên (vùng trống phía trên khung kết quả) */
+.menh-section::after { right: -90px; top: -70px; width: 540px; height: 386px; opacity: .08; transform: rotate(10deg); }
+/* Khối minh bạch: góc phải */
+.trust::after { right: -60px; top: 50%; width: 420px; height: 300px; opacity: .06; transform: translateY(-50%) rotate(8deg); }
+/* Chân trang: góc trái dưới (dưới đoạn giới thiệu) */
+.site-footer .footer-grid::after { left: -40px; bottom: -44px; width: 330px; height: 236px; opacity: .08; transform: rotate(-8deg); }
+/* Đầu các trang con (nền kem): hoa sen xanh mờ bên phải */
+.page-hero::after { right: 4%; top: 50%; width: 300px; height: 215px; opacity: .07; transform: translateY(-50%); background-image: url("../img/brand/lotus-green.svg"); }
+.page-hero--collection::after, .page-hero--center::after { display: none; }
+
+/* ---------- 3. Con dấu hoa sen khi đặt hàng / nhận cọc thành công ---------- */
+.order-done__icon:not(.order-done__icon--wait):not(.order-done__icon--muted) {
+  width: 96px; height: 96px; background: url("../img/brand/lotus-seal.svg") center / contain no-repeat;
+  box-shadow: 0 0 0 7px var(--c-primary-soft), 0 10px 24px rgba(6, 46, 28, .18);
+  transform: rotate(-8deg); animation: lotus-seal-in 650ms cubic-bezier(.2, .9, .3, 1.25) both;
+}
+.order-done__icon:not(.order-done__icon--wait):not(.order-done__icon--muted) .icon { display: none; }
+@keyframes lotus-seal-in { from { opacity: 0; transform: rotate(-8deg) scale(1.6); } }
+
+/* ---------- 4. Hoa sen nhạt làm nền chờ khi ảnh đang tải ---------- */
+.product-card__media, .gallery__main, .cat-tile__img, .post-card__media, .article__cover, .occasion {
+  background-image: url("../img/brand/lotus-ghost.svg");
+  background-repeat: no-repeat; background-position: center; background-size: 42% auto;
+}
+.cat-tile__img { background-size: 48% auto; }
+.occasion { background-color: var(--c-cream); }
+
+@media (max-width: 767px) {
+  .menh-section::after { width: 300px; height: 215px; right: -70px; top: -40px; }
+  .site-footer .footer-grid::after { width: 240px; height: 172px; left: auto; right: -50px; }
+  .page-hero::after { width: 180px; height: 130px; right: -30px; opacity: .06; }
+  .section-head--row .section-title::after { width: 96px; height: 17px; }
+}
