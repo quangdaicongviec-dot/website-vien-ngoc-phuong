@@ -8,7 +8,7 @@
 defined('ADMIN') || exit;
 
 $names = ['san-pham' => 'Sản phẩm', 'danh-muc' => 'Danh mục', 'kiem-dinh' => 'Giấy kiểm định', 'bo-suu-tap' => 'Bộ sưu tập', 'banner' => 'Banner',
-          'bai-viet' => 'Bài viết', 'chinh-sach' => 'Chính sách', 'khach-hang' => 'Khách đeo thật', 'cai-dat' => 'Cài đặt', 'van-ban' => 'Chữ trên các trang', 'ngu-hanh' => 'Ngũ hành & quà tặng'];
+          'bai-viet' => 'Bài viết', 'chinh-sach' => 'Chính sách', 'khach-hang' => 'Khách đeo thật', 'cai-dat' => 'Cài đặt', 'van-ban' => 'Chữ trên các trang', 'ngu-hanh' => 'Ngũ hành & quà tặng', 'tai-lieu' => 'Hướng dẫn & tài liệu'];
 
 require_once ROOT . '/includes/sao-luu.php';   // backup_files(), backup_make(), backup_allowed(), backup_auto_list()
 

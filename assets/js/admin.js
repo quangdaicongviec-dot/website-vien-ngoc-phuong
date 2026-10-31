@@ -449,4 +449,26 @@
 
   /* ---------- Tự gửi biểu mẫu khi đổi lựa chọn (lọc) ---------- */
   $$('[data-autosubmit]').forEach(function (f) { f.addEventListener('change', function () { f.submit(); }); });
+
+  /* ---------- Hướng dẫn & tài liệu: in / lưu PDF, tìm trong tài liệu ---------- */
+  $$('[data-print]').forEach(function (b) { b.addEventListener('click', function () { window.print(); }); });
+  $$('[data-doc]').forEach(function (doc) {
+    var input = $('[data-doc-search]', doc), secs = $$('[data-doc-sec]', doc), empty = $('[data-doc-empty]', doc);
+    var items = $$('.doc-toc li', doc), wrap = $('.doc-toc-wrap', doc);
+    var fold = function (s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase(); };
+    var texts = secs.map(function (s) { return fold(s.textContent); });
+    if (wrap && window.matchMedia('(max-width: 1100px)').matches) wrap.open = false;   // điện thoại: mục lục thu gọn
+    if (!input) return;
+    input.addEventListener('input', function () {
+      var q = fold(input.value.trim()), any = false;
+      secs.forEach(function (s, i) { var hit = !q || texts[i].indexOf(q) !== -1; s.hidden = !hit; if (hit) any = true; });
+      items.forEach(function (li) {
+        var a = li.querySelector('a'), t = a && document.getElementById(a.getAttribute('href').slice(1));
+        var sec = t && t.closest('[data-doc-sec]');
+        li.hidden = !!(sec && sec.hidden);
+      });
+      if (wrap && q) wrap.open = true;
+      if (empty) empty.hidden = any;
+    });
+  });
 })();

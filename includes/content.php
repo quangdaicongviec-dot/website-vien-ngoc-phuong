@@ -24,6 +24,7 @@ const CONTENT_SOURCES = [
     'cai-dat'    => '',
     'van-ban'    => '',
     'ngu-hanh'   => '',
+    'tai-lieu'   => '',   // Hướng dẫn & tài liệu (nội dung gốc: includes/tai-lieu-mac-dinh.php)
 ];
 
 function content_dir(): string

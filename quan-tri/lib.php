@@ -65,7 +65,7 @@ function adm_roles(): array
 /** Trang nhân viên bán hàng được vào */
 function adm_sales_pages(): array
 {
-    return ['tong-quan', 'don-hang', 'giu-hang', 'phieu', 'lich-hen', 'lien-he', 'tai-khoan', 'dang-xuat'];
+    return ['tong-quan', 'don-hang', 'giu-hang', 'phieu', 'lich-hen', 'lien-he', 'tai-khoan', 'huong-dan', 'dang-xuat'];
 }
 
 function adm_users(): array
@@ -394,7 +394,7 @@ function clean_html(string $html): string
     }
     $allowed = [
         'p' => [], 'br' => [], 'h2' => [], 'h3' => [], 'h4' => [], 'strong' => [], 'b' => [], 'em' => [], 'i' => [], 'u' => [], 's' => [],
-        'ul' => [], 'ol' => [], 'li' => [], 'blockquote' => [], 'hr' => [], 'sub' => [], 'sup' => [], 'small' => [], 'mark' => [],
+        'ul' => [], 'ol' => [], 'li' => [], 'blockquote' => [], 'hr' => [], 'sub' => [], 'sup' => [], 'small' => [], 'mark' => [], 'code' => [],
         'a' => ['href', 'target', 'rel', 'title'], 'img' => ['src', 'alt', 'width', 'height', 'loading'],
         'figure' => [], 'figcaption' => [], 'table' => [], 'thead' => [], 'tbody' => [], 'tr' => [], 'th' => ['colspan', 'rowspan'], 'td' => ['colspan', 'rowspan'],
     ];
@@ -834,6 +834,7 @@ function adm_icon(string $name): string
         'unlink'    => '<path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><path d="M8 2v3"/><path d="M2 8h3"/><path d="M16 22v-3"/><path d="M22 16h-3"/>',
         'table'     => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>',
         'eraser'    => '<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>',
+        'book'      => '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
         'cloud'     => '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
         'history'   => '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
         'users'     => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
@@ -992,7 +993,23 @@ function adm_menu(): array
                          ['khach-hang', 'Khách đeo thật', 'heart'], ['van-ban', 'Chữ trên các trang', 'layout'], ['ngu-hanh', 'Ngũ hành & quà tặng', 'leaf']],
         'Cài đặt'    => [['cai-dat', 'Cài đặt cửa hàng', 'settings'], ['cai-dat', 'Lưu trữ Cloudflare R2', 'cloud', ['nhom' => 'luu-tru']],
                          ['tai-khoan', 'Tài khoản', 'users'], ['sao-luu', 'Sao lưu & khôi phục', 'database'], ['nhat-ky', 'Nhật ký thao tác', 'history']],
+        'Trợ giúp'   => [['huong-dan', 'Hướng dẫn & tài liệu', 'book']],
     ];
+}
+
+/** Mục menu đang mở (để nút "Hướng dẫn" mở đúng phần trong tài liệu hướng dẫn) */
+function adm_menu_label(string $active): string
+{
+    $label = '';
+    foreach (adm_menu() as $items) {
+        foreach ($items as $it) {
+            $q = $it[3] ?? [];
+            if ($it[0] === $active && ($q ? array_intersect_assoc($q, $_GET) === $q : $label === '')) {
+                $label = $it[1];
+            }
+        }
+    }
+    return $label;
 }
 
 function adm_head(string $title, string $active, string $actions = '', array $crumbs = []): void
@@ -1056,7 +1073,12 @@ function adm_head(string $title, string $active, string $actions = '', array $cr
         <?php if ($crumbs): ?><p class="adm-crumbs"><?php foreach ($crumbs as $c): ?><a href="<?= e($c[1]) ?>"><?= e($c[0]) ?></a><span aria-hidden="true">/</span><?php endforeach; ?></p><?php endif; ?>
         <h1><?= e($title) ?></h1>
       </div>
-      <?php if ($actions): ?><div class="adm-page-head__actions"><?= $actions ?></div><?php endif; ?>
+      <?php
+      // Nút "Hướng dẫn": mở đúng phần của trang này trong tài liệu hướng dẫn sử dụng
+      $help = $active !== 'huong-dan' && adm_can('huong-dan', $u) && ($lbl = adm_menu_label($active)) !== ''
+          ? '<a class="btn btn--sm btn--ghost adm-help" href="' . e(adm_url('huong-dan', ['tl' => 'quan-tri'])) . '#' . e(make_slug($lbl)) . '" title="Hướng dẫn dùng trang này">' . adm_icon('book') . '<span>Hướng dẫn</span></a>'
+          : '';
+      if ($actions || $help): ?><div class="adm-page-head__actions"><?= $help . $actions ?></div><?php endif; ?>
     </div>
     <?php if ($f = flash()): ?><div class="adm-flash adm-flash--<?= e($f['type']) ?>" role="status"><?= adm_icon($f['type'] === 'error' ? 'alert' : 'check') ?><p><?= e($f['message']) ?></p><button type="button" class="icon-mini" data-dismiss aria-label="Đóng"><?= icon('close') ?></button></div><?php endif; ?>
 <?php

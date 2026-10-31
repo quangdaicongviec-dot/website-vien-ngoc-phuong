@@ -38,6 +38,7 @@ Mở **https://vienngocphuong.com/quan-tri/** (chạy thử trên máy: http://l
 | Tài khoản | Đổi mật khẩu; Quản lý thêm tài khoản **Nhân viên bán hàng** (chỉ xử lý đơn, giữ hàng, phiếu, lịch hẹn, tin nhắn), khóa / đặt lại mật khẩu |
 | Sao lưu & khôi phục | Tải 1 file .zip toàn bộ dữ liệu, khôi phục từ file; **máy chủ tự sao lưu mỗi đêm** (giữ 7 bản, tải về được) và gửi lên Cloudflare R2 nếu đã kết nối; **lịch sử thay đổi** từng mục – lỡ tay xóa/sửa sai thì quay lại bản cũ |
 | Nhật ký thao tác | Ai làm gì, lúc nào |
+| Hướng dẫn & tài liệu | Tài liệu **Chức năng website** và **Hướng dẫn sử dụng trang quản trị** ngay trong trang quản trị: mục lục, tìm kiếm, in / lưu PDF. Mỗi trang quản trị có nút **Hướng dẫn** mở đúng phần liên quan. Quản lý sửa được nội dung (con số tự lấy theo Cài đặt), thêm tài liệu riêng của cửa hàng; nhân viên chỉ xem. Nội dung gốc: `includes/tai-lieu-mac-dinh.php` |
 
 **Dữ liệu lưu ở đâu:** nội dung đã sửa trong trang quản trị nằm ở `data/noi-dung/` (file `.json`), tài khoản & nhật ký ở `data/quan-tri/`, ảnh tải lên ở `assets/img/uploads/`. Mục nào **chưa từng sửa** trong trang quản trị thì website vẫn đọc file mẫu `data/*.php` / `config.php` như cũ; **đã sửa** thì file mẫu không còn được dùng cho mục đó.
 
