@@ -84,6 +84,9 @@ if (secret_unreadable()) {
     $add('warn', 'Cần nhập lại mật khẩu SMTP / khóa R2', 'Thông tin bí mật lưu trước đây không đọc được (website vừa chuyển máy chủ hoặc mất khóa mã hóa).', adm_url('cai-dat', ['nhom' => 'luu-tru']));
 }
 $r2st = r2_status();
+if (!r2_ready()) {
+    $add('info', 'Chưa kết nối Cloudflare R2', 'Kết nối để ảnh / video tải lên được lưu thêm trên R2 và dữ liệu được sao lưu lên R2 mỗi đêm (phòng khi máy chủ hỏng).', adm_url('cai-dat', ['nhom' => 'luu-tru']), 'Kết nối');
+}
 if (cfg('r2_backup') && r2_ready() && !empty($r2st['backup']) && empty($r2st['backup']['ok'])) {
     $add('warn', 'Sao lưu lên Cloudflare R2 bị lỗi', (string) $r2st['backup']['message'], adm_url('cai-dat', ['nhom' => 'luu-tru']), 'Kiểm tra');
 } elseif (r2_ready() && !empty($r2st['upload_error']) && time() - (int) $r2st['upload_error']['time'] < 3 * 86400) {

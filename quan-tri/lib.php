@@ -834,6 +834,7 @@ function adm_icon(string $name): string
         'unlink'    => '<path d="m18.84 12.25 1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="m5.17 11.75-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><path d="M8 2v3"/><path d="M2 8h3"/><path d="M16 22v-3"/><path d="M22 16h-3"/>',
         'table'     => '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>',
         'eraser'    => '<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>',
+        'cloud'     => '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
         'history'   => '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
         'users'     => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
         'database'  => '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
@@ -979,7 +980,7 @@ function csv_set_status(string $name, string $id, string $status, string $note =
  * Bố cục trang
  * ------------------------------------------------------------------ */
 
-/** Menu bên trái: [nhóm => [[trang, nhãn, biểu tượng], …]] */
+/** Menu bên trái: [nhóm => [[trang, nhãn, biểu tượng, (tham số thêm)], …]] */
 function adm_menu(): array
 {
     return [
@@ -989,7 +990,8 @@ function adm_menu(): array
         'Sản phẩm'   => [['san-pham', 'Sản phẩm', 'gem'], ['danh-muc', 'Danh mục', 'tag'], ['kiem-dinh', 'Giấy kiểm định', 'cert'], ['bo-suu-tap', 'Bộ sưu tập quà tặng', 'gift']],
         'Nội dung'   => [['banner', 'Banner trang chủ', 'image'], ['bai-viet', 'Cẩm nang (bài viết)', 'text'], ['chinh-sach', 'Chính sách', 'shield'],
                          ['khach-hang', 'Khách đeo thật', 'heart'], ['van-ban', 'Chữ trên các trang', 'layout'], ['ngu-hanh', 'Ngũ hành & quà tặng', 'leaf']],
-        'Cài đặt'    => [['cai-dat', 'Cài đặt cửa hàng', 'settings'], ['tai-khoan', 'Tài khoản', 'users'], ['sao-luu', 'Sao lưu & khôi phục', 'database'], ['nhat-ky', 'Nhật ký thao tác', 'history']],
+        'Cài đặt'    => [['cai-dat', 'Cài đặt cửa hàng', 'settings'], ['cai-dat', 'Lưu trữ Cloudflare R2', 'cloud', ['nhom' => 'luu-tru']],
+                         ['tai-khoan', 'Tài khoản', 'users'], ['sao-luu', 'Sao lưu & khôi phục', 'database'], ['nhat-ky', 'Nhật ký thao tác', 'history']],
     ];
 }
 
@@ -1037,8 +1039,12 @@ function adm_head(string $title, string $active, string $actions = '', array $cr
           if (!$items) continue; ?>
         <?php if ($group !== ''): ?><p class="adm-nav__group"><?= e($group) ?></p><?php endif; ?>
         <ul>
-          <?php foreach ($items as [$page, $label, $ic]): ?>
-            <li><a href="<?= e(adm_url($page)) ?>"<?= $page === $active ? ' aria-current="page"' : '' ?>><?= adm_icon($ic) ?><span><?= e($label) ?></span><?php if (!empty($counts[$page])): ?><b class="adm-nav__count"><?= (int) $counts[$page] ?></b><?php endif; ?></a></li>
+          <?php foreach ($items as $it):
+              [$page, $label, $ic] = $it;
+              $q = $it[3] ?? [];
+              // Mục có tham số (VD Cài đặt → Lưu trữ R2) sáng khi đúng nhóm; mục chung sáng khi không thuộc nhóm riêng nào
+              $on = $page === $active && ($q ? array_intersect_assoc($q, $_GET) === $q : !in_array($_GET['nhom'] ?? '', ['luu-tru'], true)); ?>
+            <li><a href="<?= e(adm_url($page, $q)) ?>"<?= $on ? ' aria-current="page"' : '' ?>><?= adm_icon($ic) ?><span><?= e($label) ?></span><?php if (!$q && !empty($counts[$page])): ?><b class="adm-nav__count"><?= (int) $counts[$page] ?></b><?php endif; ?></a></li>
           <?php endforeach; ?>
         </ul>
       <?php endforeach; ?>

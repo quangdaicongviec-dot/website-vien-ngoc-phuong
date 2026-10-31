@@ -222,7 +222,7 @@ a.tbl__main:hover { color: var(--c-primary); text-decoration: underline; }
 .adm-chip:hover { border-color: var(--c-primary); color: var(--c-primary); }
 .adm-chip[aria-current="true"] { background: var(--c-deep); border-color: var(--c-deep); color: #fff; }
 .adm-chip[aria-current="true"] b { background: var(--c-gold); color: #241a00; }
-.adm-tabs { display: flex; gap: 4px; margin: 0 0 18px; padding: 4px; overflow-x: auto; border-radius: 999px; background: #ebe6d8; scrollbar-width: none; }
+.adm-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 18px; padding: 4px; border-radius: 16px; background: #ebe6d8; }
 .adm-tabs a { flex: none; padding: 8px 16px; border-radius: 999px; color: var(--c-text); font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .adm-tabs a[aria-current="page"] { background: #fff; color: var(--c-deep); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
 
@@ -428,4 +428,10 @@ body.adm--bare { min-height: 100vh; background: radial-gradient(900px 600px at 8
   .adm-chip { flex: none; }
   .adm-filter > form { flex: 1 1 100%; }
   .adm-filter > form .ai { width: 100%; }
+}
+
+/* Hàng thẻ trên điện thoại: 2 cột cho gọn, thấy hết các thẻ */
+@media (max-width: 760px) {
+  .adm-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-tabs a { padding: 8px 10px; text-align: center; white-space: normal; line-height: 1.3; }
 }
