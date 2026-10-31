@@ -31,7 +31,7 @@ jobs:
       SSHPASS: ${{ secrets.SSH_PASSWORD }}
     steps:
       - name: Lấy mã nguồn
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Kiểm tra lỗi cú pháp PHP
         run: |

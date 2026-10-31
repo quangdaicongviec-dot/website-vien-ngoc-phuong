@@ -123,9 +123,11 @@ fi
 code() { curl -s -o /dev/null -w '%{http_code}' --max-time 20 $RES "$BASE$1" || true; }
 sleep 2   # chờ Nginx nạp lại cấu hình (nếu vừa đổi)
 FAIL=0
-for p in / /san-pham /lien-he /quan-tri/ /robots.txt /sitemap.xml; do
+for p in / /san-pham /lien-he /robots.txt /sitemap.xml; do
     c=$(code "$p"); echo "   $p → $c"; [ "$c" = 200 ] || FAIL=1
 done
+# Trang quản trị: 200 (trang tạo tài khoản / đăng nhập) hoặc 303 (đã có tài khoản → chuyển sang đăng nhập)
+c=$(code "/quan-tri/"); echo "   /quan-tri/ → $c"; [ "$c" = 200 ] || [ "$c" = 303 ] || FAIL=1
 for p in /data/don-hang/don-hang.json /data/quan-tri/tai-khoan.json /includes/init.php /config.php /quan-tri/lib.php /cong-cu/vps/cai-dat-may-chu.sh /.git/config; do
     c=$(code "$p"); [ "$c" = 403 ] || [ "$c" = 404 ] || { echo "   NGUY HIỂM: $p mở được ($c)"; FAIL=1; }
 done
