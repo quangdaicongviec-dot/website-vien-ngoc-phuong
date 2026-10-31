@@ -23,8 +23,10 @@ SRC=$WEB/cong-cu/vps
 
 [ "$(id -u)" = 0 ] || { echo "Cần chạy bằng root." >&2; exit 1; }
 command -v "php-fpm$PHPV" >/dev/null || { echo "Máy chủ thiếu php$PHPV-fpm." >&2; exit 1; }
+# Lấy danh sách 1 lần rồi tìm trong đó (không dùng "php -m | grep -q": grep thoát sớm làm php bị ngắt → báo nhầm là thiếu)
+MODS=$(php -m)
 for m in curl gd mbstring zip dom openssl; do
-    php -m | grep -qix "$m" || { echo "Máy chủ thiếu tiện ích PHP: $m (cài gói php$PHPV-$m)." >&2; exit 1; }
+    grep -qix "$m" <<<"$MODS" || { echo "Máy chủ thiếu tiện ích PHP: $m (cài gói php$PHPV-$m)." >&2; exit 1; }
 done
 
 # Chép tệp khi nội dung khác; trả về 0 nếu có thay đổi

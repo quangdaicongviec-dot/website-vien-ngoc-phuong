@@ -24,9 +24,9 @@ SANS=""
 WANT=()
 for n in "$DOMAIN" "www.$DOMAIN"; do points "$n" && WANT+=("$n"); done
 MISSING=0
-for n in "${WANT[@]}"; do printf '%s\n' "$SANS" | grep -qx "$n" || MISSING=1; done
+for n in "${WANT[@]}"; do grep -qx "$n" <<<"$SANS" || MISSING=1; done
 
-if [ "$MISSING" = 1 ] && printf '%s\n' "${WANT[@]}" | grep -qx "$DOMAIN"; then
+if [ "$MISSING" = 1 ] && [ "${WANT[0]:-}" = "$DOMAIN" ]; then
     LAST=$(cat "$WAIT" 2>/dev/null || echo 0)
     if [ $(( $(date +%s) - LAST )) -ge 1800 ]; then        # lỗi thì chờ 30 phút (tránh bị Let's Encrypt chặn)
         ARGS=(); for n in "${WANT[@]}"; do ARGS+=(-d "$n"); done

@@ -23,7 +23,7 @@ SANS=""
 if [ -s "$CERT/fullchain.pem" ]; then
     SANS=$(openssl x509 -in "$CERT/fullchain.pem" -noout -ext subjectAltName 2>/dev/null | grep -o 'DNS:[^,]*' | sed 's/DNS://; s/ //g' || true)
 fi
-has() { printf '%s\n' "$SANS" | grep -qx "$1"; }
+has() { grep -qx "$1" <<<"$SANS"; }
 
 ACME='    location ^~ /.well-known/acme-challenge/ {
         root /var/www/letsencrypt;
